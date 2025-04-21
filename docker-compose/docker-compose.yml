@@ -1,0 +1,28 @@
+services:
+  db:
+    image: mysql:8
+    restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD: secret
+      MYSQL_DATABASE: simpledb
+      MYSQL_USER: administrador
+      MYSQL_PASSWORD: secret
+    ports:
+      - "3306:3306"
+    volumes:
+      - dbdata:/var/lib/mysql
+
+  backend:
+    build: .
+    ports:
+      - "3000:3000"
+    environment:
+      - DB_HOST=db
+      - DB_USER=administrador
+      - DB_PASSWORD=secret
+      - DB_NAME=simpledb
+    depends_on:
+      - db
+
+volumes:
+  dbdata:
